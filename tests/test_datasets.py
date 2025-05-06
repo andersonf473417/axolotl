@@ -405,8 +405,20 @@ class TestDatasetPreparation:
                 shutil.rmtree(tmp_ds_path)
 
     @enable_hf_offline
-    def test_loading_local_dataset_folder(self, tokenizer):
+    def test_loading_local_dataset_folder(self, tokenizer, monkeypatch):
         """Verify that a dataset downloaded to a local folder can be loaded"""
+
+        def mock_snapshot_download(repo_id, repo_type, local_dir):
+            # Create a minimal valid dataset structure locally to avoid network calls
+            import os
+            os.makedirs(local_dir, exist_ok=True)
+            # Create a dummy parquet file to simulate a dataset
+            import pandas as pd
+            df = pd.DataFrame({"text": ["test"] * 2000})
+            df.to_parquet(os.path.join(local_dir, "train-00000-of-00001.parquet"))
+            return local_dir
+
+        monkeypatch.setattr("axolotl.integrations.huggingface.dataset_moonshots.snapshot_download", mock_snapshot_download)
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_ds_path = Path(tmp_dir) / "mhenrichsen/alpaca_2k_test"
