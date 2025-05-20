@@ -43,7 +43,6 @@ from trl.trainer.utils import pad
 
 from axolotl.core.trainers.grpo.sampler import SequenceParallelRepeatRandomSampler
 from axolotl.core.trainers.mixins import RngLoaderMixin, SchedulerMixin
-from axolotl.monkeypatch.attention.ring_attn.patch import get_ring_attn_group
 
 if is_peft_available():
     # pylint: disable=unused-import

@@ -55,7 +55,7 @@ from transformers.integrations.deepspeed import (
 from axolotl.common.architectures import MOE_ARCH_BLOCK
 from axolotl.integrations.base import PluginManager
 from axolotl.models.mamba import fix_mamba_attn_for_loss
-from axolotl.monkeypatch.attention.ring_attn.patch import get_ring_attn_group
+from axolotl.monkeypatch.attention.ring_attn import get_ring_attn_group
 from axolotl.monkeypatch.multipack import (
     SUPPORTED_MULTIPACK_MODEL_TYPES,
     patch_for_multipack,
@@ -683,6 +683,7 @@ class ModelLoader:
 
         if self.cfg.sequence_parallel_degree and self.cfg.sequence_parallel_degree > 1:
             from axolotl.monkeypatch.attention.ring_attn import (
+                get_ring_attn_group,
                 patch_prepare_data_loader,
                 patch_prepare_device_mesh,
                 register_ring_attn,
