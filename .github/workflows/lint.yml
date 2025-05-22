@@ -1,15 +1,5 @@
 name: lint
-on:
-  # check on PRs, and manual triggers
-  merge_group:
-  pull_request:
-      paths:
-       - '**.py'
-       - 'requirements.txt'
-       - '.github/workflows/*.yml'
-       - "*.[q]md"
-       - "examples/**/*.y[a]?ml"
-  workflow_dispatch:
+on: push
 
 jobs:
   pre-commit:
