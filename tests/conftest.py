@@ -252,7 +252,7 @@ def download_llama3_8b_model_fixture():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def download_llama3_8b_instruct_model_fixture():
+def download_llama3_8b_instruct_model_fixture() -> None:
     # download the tokenizer only
     snapshot_download_w_retry(
         "NousResearch/Meta-Llama-3-8B-Instruct",
@@ -262,7 +262,7 @@ def download_llama3_8b_instruct_model_fixture():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def download_phi_35_mini_model_fixture():
+def download_phi_35_mini_model_fixture() -> None:
     # download the tokenizer only
     snapshot_download_w_retry(
         "microsoft/Phi-3.5-mini-instruct", repo_type="model", allow_patterns=["*token*"]
@@ -270,7 +270,7 @@ def download_phi_35_mini_model_fixture():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def download_phi_3_medium_model_fixture():
+def download_phi_3_medium_model_fixture() -> None:
     # download the tokenizer only
     snapshot_download_w_retry(
         "microsoft/Phi-3-medium-128k-instruct",
@@ -280,7 +280,7 @@ def download_phi_3_medium_model_fixture():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def download_mistral_7b_model_fixture():
+def download_mistral_7b_model_fixture() -> None:
     # download the tokenizer only
     snapshot_download_w_retry(
         "casperhansen/mistral-7b-instruct-v0.1-awq",
@@ -290,7 +290,7 @@ def download_mistral_7b_model_fixture():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def download_gemma3_4b_model_fixture():
+def download_gemma3_4b_model_fixture() -> None:
     # download the tokenizer only
     snapshot_download_w_retry(
         "mlx-community/gemma-3-4b-it-8bit",
@@ -300,7 +300,7 @@ def download_gemma3_4b_model_fixture():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def download_gemma_2b_model_fixture():
+def download_gemma_2b_model_fixture() -> None:
     # download the tokenizer only
     snapshot_download_w_retry(
         "unsloth/gemma-2b-it",
@@ -311,7 +311,7 @@ def download_gemma_2b_model_fixture():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def download_gemma2_9b_model_fixture():
+def download_gemma2_9b_model_fixture() -> None:
     # download the tokenizer only
     snapshot_download_w_retry(
         "mlx-community/gemma-2-9b-it-4bit",
@@ -321,7 +321,7 @@ def download_gemma2_9b_model_fixture():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def download_mlx_mistral_7b_model_fixture():
+def download_mlx_mistral_7b_model_fixture() -> None:
     # download the tokenizer only
     snapshot_download_w_retry(
         "mlx-community/Mistral-7B-Instruct-v0.3-4bit",
@@ -331,7 +331,7 @@ def download_mlx_mistral_7b_model_fixture():
 
 
 @pytest.fixture
-def download_llama2_model_fixture():
+def download_llama2_model_fixture() -> None:
     # download the tokenizer only
     snapshot_download_w_retry(
         "NousResearch/Llama-2-7b-hf",
@@ -341,7 +341,7 @@ def download_llama2_model_fixture():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def download_llama32_1b_model_fixture():
+def download_llama32_1b_model_fixture() -> None:
     snapshot_download_w_retry(
         "osllmai-community/Llama-3.2-1B",
         repo_type="model",
@@ -351,8 +351,8 @@ def download_llama32_1b_model_fixture():
 @pytest.fixture
 @enable_hf_offline
 def tokenizer_huggyllama(
-    download_huggyllama_model_fixture,
-):  # pylint: disable=unused-argument,redefined-outer-name
+    download_huggyllama_model_fixture: None,
+) -> AutoTokenizer:  # pylint: disable=unused-argument,redefined-outer-name
     tokenizer = AutoTokenizer.from_pretrained("huggyllama/llama-7b")
     tokenizer.pad_token = "</s>"
 
@@ -362,8 +362,8 @@ def tokenizer_huggyllama(
 @pytest.fixture
 @enable_hf_offline
 def tokenizer_huggyllama_w_special_tokens(
-    tokenizer_huggyllama,
-):  # pylint: disable=redefined-outer-name
+    tokenizer_huggyllama: AutoTokenizer,
+) -> AutoTokenizer:  # pylint: disable=redefined-outer-name
     tokenizer_huggyllama.add_special_tokens(
         {
             "bos_token": "<s>",
@@ -378,8 +378,8 @@ def tokenizer_huggyllama_w_special_tokens(
 @pytest.fixture
 @enable_hf_offline
 def tokenizer_llama2_7b(
-    download_llama2_model_fixture,
-):  # pylint: disable=unused-argument,redefined-outer-name
+    download_llama2_model_fixture: None,
+) -> AutoTokenizer:  # pylint: disable=unused-argument,redefined-outer-name
     tokenizer = AutoTokenizer.from_pretrained("NousResearch/Llama-2-7b-hf")
 
     return tokenizer
@@ -388,8 +388,8 @@ def tokenizer_llama2_7b(
 @pytest.fixture
 @enable_hf_offline
 def tokenizer_mistral_7b_instruct(
-    download_mlx_mistral_7b_model_fixture,
-):  # pylint: disable=unused-argument,redefined-outer-name
+    download_mlx_mistral_7b_model_fixture: None,
+) -> AutoTokenizer:  # pylint: disable=unused-argument,redefined-outer-name
     return AutoTokenizer.from_pretrained("casperhansen/mistral-7b-instruct-v0.1-awq")
 
 
@@ -411,7 +411,7 @@ def tokenizer_mistral_7b_instruct_chatml(tokenizer_mistral_7b_instruct):
 
 
 @pytest.fixture
-def temp_dir():
+def temp_dir() -> Iterator[str]:
     # Create a temporary directory
     _temp_dir = tempfile.mkdtemp()
     yield _temp_dir
@@ -420,7 +420,7 @@ def temp_dir():
 
 
 @pytest.fixture(scope="function", autouse=True)
-def cleanup_monkeypatches():
+def cleanup_monkeypatches() -> Iterator[None]:
     from transformers import Trainer
     from transformers.models.llama.modeling_llama import (  # LlamaFlashAttention2,
         LlamaAttention,
@@ -478,7 +478,7 @@ def cleanup_monkeypatches():
 @pytest.fixture
 def dataset_winglian_tiny_shakespeare(
     download_ds_fixture_bundle: Path,
-):  # pylint: disable=redefined-outer-name
+) -> Dataset:  # pylint: disable=redefined-outer-name
     ds_path = download_ds_fixture_bundle / "winglian__tiny-shakespeare"
     return datasets.load_from_disk(ds_path)
 
@@ -486,7 +486,7 @@ def dataset_winglian_tiny_shakespeare(
 @pytest.fixture
 def dataset_tatsu_lab_alpaca(
     download_ds_fixture_bundle: Path,
-):  # pylint: disable=redefined-outer-name
+) -> Dataset:  # pylint: disable=redefined-outer-name
     ds_path = download_ds_fixture_bundle / "tatsu-lab__alpaca"
     return datasets.load_from_disk(ds_path)["train"]
 
@@ -494,7 +494,7 @@ def dataset_tatsu_lab_alpaca(
 @pytest.fixture
 def dataset_mhenrichsen_alpaca_2k_test(
     download_ds_fixture_bundle: Path,
-):  # pylint: disable=redefined-outer-name
+) -> Dataset:  # pylint: disable=redefined-outer-name
     ds_path = download_ds_fixture_bundle / "mhenrichsen__alpaca_2k_test"
     return datasets.load_from_disk(ds_path)["train"]
 
@@ -502,7 +502,7 @@ def dataset_mhenrichsen_alpaca_2k_test(
 @pytest.fixture
 def dataset_argilla_ultrafeedback_binarized_preferences_cleaned(
     download_ds_fixture_bundle: Path,
-):  # pylint: disable=redefined-outer-name
+) -> Dataset:  # pylint: disable=redefined-outer-name
     ds_path = (
         download_ds_fixture_bundle
         / "argilla__ultrafeedback-binarized-preferences-cleaned"
@@ -513,7 +513,7 @@ def dataset_argilla_ultrafeedback_binarized_preferences_cleaned(
 @pytest.fixture
 def dataset_fozziethebeat_alpaca_messages_2k_dpo_test(
     download_ds_fixture_bundle: Path,
-):  # pylint: disable=redefined-outer-name
+) -> Dataset:  # pylint: disable=redefined-outer-name
     ds_path = download_ds_fixture_bundle / "fozziethebeat__alpaca_messages_2k_dpo_test"
     return datasets.load_from_disk(ds_path)["train"]
 
@@ -521,7 +521,7 @@ def dataset_fozziethebeat_alpaca_messages_2k_dpo_test(
 @pytest.fixture
 def dataset_fozziethebeat_alpaca_messages_2k_dpo_test_rev_ea82cff(
     download_ds_fixture_bundle: Path,
-):  # pylint: disable=redefined-outer-name
+) -> Dataset:  # pylint: disable=redefined-outer-name
     ds_path = (
         download_ds_fixture_bundle
         / "fozziethebeat__alpaca_messages_2k_dpo_test__rev_ea82cff"
@@ -535,27 +535,27 @@ def dataset_fozziethebeat_alpaca_messages_2k_dpo_test_rev_ea82cff(
     reason="Not running in CI cache preload",
 )
 def test_load_fixtures(
-    download_smollm2_135m_model,
-    download_qwen_2_5_half_billion_model,
-    download_tatsu_lab_alpaca_dataset,
-    download_mhenrichsen_alpaca_2k_dataset,
-    download_mhenrichsen_alpaca_2k_w_revision_dataset,
-    download_mlabonne_finetome_100k_dataset,
-    download_argilla_distilabel_capybara_dpo_7k_binarized_dataset,
-    download_arcee_ai_distilabel_intel_orca_dpo_pairs_dataset,
-    download_argilla_dpo_pairs_dataset,
-    download_tiny_shakespeare_dataset,
-    download_deepseek_model_fixture,
-    download_huggyllama_model_fixture,
-    download_llama_1b_model_fixture,
-    download_llama3_8b_model_fixture,
-    download_llama3_8b_instruct_model_fixture,
-    download_phi_35_mini_model_fixture,
-    download_phi_3_medium_model_fixture,
-    download_mistral_7b_model_fixture,
-    download_gemma_2b_model_fixture,
-    download_gemma2_9b_model_fixture,
-    download_mlx_mistral_7b_model_fixture,
-    download_llama2_model_fixture,
-):
+    download_smollm2_135m_model: None,
+    download_qwen_2_5_half_billion_model: None,
+    download_tatsu_lab_alpaca_dataset: None,
+    download_mhenrichsen_alpaca_2k_dataset: None,
+    download_mhenrichsen_alpaca_2k_w_revision_dataset: None,
+    download_mlabonne_finetome_100k_dataset: None,
+    download_argilla_distilabel_capybara_dpo_7k_binarized_dataset: None,
+    download_arcee_ai_distilabel_intel_orca_dpo_pairs_dataset: None,
+    download_argilla_dpo_pairs_dataset: None,
+    download_tiny_shakespeare_dataset: None,
+    download_deepseek_model_fixture: None,
+    download_huggyllama_model_fixture: None,
+    download_llama_1b_model_fixture: None,
+    download_llama3_8b_model_fixture: None,
+    download_llama3_8b_instruct_model_fixture: None,
+    download_phi_35_mini_model_fixture: None,
+    download_phi_3_medium_model_fixture: None,
+    download_mistral_7b_model_fixture: None,
+    download_gemma_2b_model_fixture: None,
+    download_gemma2_9b_model_fixture: None,
+    download_mlx_mistral_7b_model_fixture: None,
+    download_llama2_model_fixture: None,
+) -> None:
     pass

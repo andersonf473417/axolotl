@@ -28,12 +28,12 @@ class TestDatasetPreparation:
     """Test a configured dataloader."""
 
     @pytest.fixture
-    def tokenizer(self, tokenizer_huggyllama) -> PreTrainedTokenizer:
+    def tokenizer(self, tokenizer_huggyllama: Any) -> PreTrainedTokenizer:
         tokenizer_huggyllama.add_special_tokens(SPECIAL_TOKENS)
         yield tokenizer_huggyllama
 
     @pytest.fixture
-    def dataset_fixture(self):
+    def dataset_fixture(self) -> Dataset:
         yield Dataset.from_list(
             [
                 {
@@ -46,7 +46,7 @@ class TestDatasetPreparation:
 
     @pytest.mark.skip(reason="TODO: fix hf hub offline to work with HF rate limits")
     @enable_hf_offline
-    def test_load_hub(self, tokenizer):
+    def test_load_hub(self, tokenizer: Any) -> None:
         """Core use case.  Verify that processing data from the hub works"""
         with tempfile.TemporaryDirectory() as tmp_dir:
             prepared_path = Path(tmp_dir) / "prepared"
@@ -72,7 +72,7 @@ class TestDatasetPreparation:
 
     @enable_hf_offline
     @pytest.mark.skip("datasets bug with local datasets when offline")
-    def test_load_local_hub(self, tokenizer):
+    def test_load_local_hub(self, tokenizer: Any) -> None:
         """Niche use case.  Verify that a local copy of a hub dataset can be loaded"""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_ds_path = Path(tmp_dir) / "mhenrichsen/alpaca_2k_test"
@@ -116,7 +116,7 @@ class TestDatasetPreparation:
             shutil.rmtree(tmp_ds_path)
 
     @enable_hf_offline
-    def test_load_from_save_to_disk(self, tokenizer, dataset_fixture):
+    def test_load_from_save_to_disk(self, tokenizer: Any, dataset_fixture: Dataset) -> None:
         """Usual use case.  Verify datasets saved via `save_to_disk` can be loaded."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_ds_name = Path(tmp_dir) / "tmp_dataset"
@@ -144,7 +144,7 @@ class TestDatasetPreparation:
             assert "labels" in dataset.features
 
     @enable_hf_offline
-    def test_load_from_dir_of_parquet(self, tokenizer, dataset_fixture):
+    def test_load_from_dir_of_parquet(self, tokenizer: Any, dataset_fixture: Dataset) -> None:
         """Usual use case.  Verify a directory of parquet files can be loaded."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_ds_dir = Path(tmp_dir) / "tmp_dataset"
@@ -179,7 +179,7 @@ class TestDatasetPreparation:
             assert "labels" in dataset.features
 
     @enable_hf_offline
-    def test_load_from_dir_of_json(self, tokenizer, dataset_fixture):
+    def test_load_from_dir_of_json(self, tokenizer: Any, dataset_fixture: Dataset) -> None:
         """Standard use case.  Verify a directory of json files can be loaded."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_ds_dir = Path(tmp_dir) / "tmp_dataset"
@@ -214,7 +214,7 @@ class TestDatasetPreparation:
             assert "labels" in dataset.features
 
     @enable_hf_offline
-    def test_load_from_single_parquet(self, tokenizer, dataset_fixture):
+    def test_load_from_single_parquet(self, tokenizer: Any, dataset_fixture: Dataset) -> None:
         """Standard use case.  Verify a single parquet file can be loaded."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_ds_path = Path(tmp_dir) / "tmp_dataset.parquet"

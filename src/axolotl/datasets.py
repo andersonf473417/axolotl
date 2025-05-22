@@ -104,9 +104,9 @@ class ConstantLengthDataset(IterableDataset):
 
     def __init__(  # pylint: disable=super-init-not-called
         self,
-        tokenizer,
-        datasets,
-        seq_length=2048,
+        tokenizer: Any,
+        datasets: List[IterableDataset],
+        seq_length: int = 2048,
     ):
         self.tokenizer = tokenizer
         self.concat_token_id = tokenizer.eos_token_id
