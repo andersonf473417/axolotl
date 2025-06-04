@@ -23,7 +23,7 @@ def default(
         {
             "role": "role",
             "content": "content",
-        },
+        }
     )
     role_map_inv = ds_cfg.get(
         "roles",
