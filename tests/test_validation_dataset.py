@@ -248,6 +248,7 @@ class TestValidationCheckDatasetConfig(BaseValidation):
         _check_config()
 
     def test_dataset_sharegpt_deprecation(self, minimal_cfg):
+        # Check sharegpt deprecation is raised
         cfg = DictDefault(
             minimal_cfg
             | {
@@ -261,8 +262,6 @@ class TestValidationCheckDatasetConfig(BaseValidation):
                 ],
             }
         )
-
-        # Check sharegpt deprecation is raised
         with pytest.raises(ValueError, match=r".*type: sharegpt.*` is deprecated.*"):
             validate_config(cfg)
 
@@ -285,7 +284,6 @@ class TestValidationCheckDatasetConfig(BaseValidation):
                 ],
             }
         )
-
         validate_config(cfg)
 
         # Check that deprecation is not thrown for non-sharegpt type
@@ -300,7 +298,6 @@ class TestValidationCheckDatasetConfig(BaseValidation):
                 ],
             }
         )
-
         validate_config(cfg)
 
     def test_message_property_mappings(self, minimal_cfg):
