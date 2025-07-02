@@ -1004,6 +1004,7 @@ class AxolotlConfigWCapabilities(AxolotlInputConfig):
                     + "Please explicitly set `lora_*_kernel` config values to `false` to disable. "
                     + "See https://docs.axolotl.ai/docs/lora_optims.html for more info."
                 )
+                )
 
         return data
 
@@ -1183,9 +1184,7 @@ class AxolotlConfigWCapabilities(AxolotlInputConfig):
     @model_validator(mode="before")
     @classmethod
     def check_fsdp2_lora_torch_2_7(cls, data):
-        
         if data.get("fsdp_version") == 2 and data.get("fsdp_config") and data.get("adapter") == "lora":
-
             env_capabilities = data.get("env_capabilities", {})
             torch_version = env_capabilities.get("torch_version")
 
