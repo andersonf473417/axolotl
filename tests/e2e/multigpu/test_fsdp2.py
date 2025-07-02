@@ -9,6 +9,10 @@ import yaml
 from accelerate.test_utils import execute_subprocess_async
 from transformers.testing_utils import get_torch_dist_unique_port
 
+from pathlib import Path
+
+from transformers.testing_utils import require_torch_2_6_0
+
 from axolotl.utils.dict import DictDefault
 
 AXOLOTL_ROOT = Path(__file__).parent.parent.parent.parent
