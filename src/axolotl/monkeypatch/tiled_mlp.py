@@ -1,3 +1,5 @@
+"""Module for patching Tiled MLP."""
+
 import math
 
 import torch
@@ -5,6 +7,7 @@ import torch.distributed as dist
 
 
 def patch_tiled_mlp(model_type, use_original_mlp=False):
+    """Patch the Tiled MLP for the given model type."""
     from deepspeed.runtime.sequence_parallel.ulysses_sp import TiledMLP
 
     try:
@@ -19,6 +22,7 @@ def patch_tiled_mlp(model_type, use_original_mlp=False):
         if use_original_mlp:
             mlp_forward = mlp_cls.forward
         else:
+
             def generic_mlp_forward(self_, hs):
                 return self_.down_proj(self_.act_fn(self_.gate_proj(hs)) * self_.up_proj(hs))
 
@@ -33,7 +37,11 @@ def patch_tiled_mlp(model_type, use_original_mlp=False):
             dist.all_reduce(num_shards_tensor, op=dist.ReduceOp.MAX)
             num_shards = num_shards_tensor.item()
 
-            compute_params = [self.down_proj.weight, self.gate_proj.weight, self.up_proj.weight]
+            compute_params = [
+                self.down_proj.weight,
+                self.gate_proj.weight,
+                self.up_proj.weight,
+            ]
 
             down_res = TiledMLP.apply(
                 mlp_forward,
