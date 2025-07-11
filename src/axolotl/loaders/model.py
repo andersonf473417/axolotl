@@ -753,7 +753,10 @@ class ModelLoader:
 
         if (
             self.is_qlora_and_fsdp_enabled
-            or (self.is_fsdp_enabled and self.cfg.fsdp_config.cpu_ram_efficient_loading)
+            or (
+                self.is_fsdp_enabled
+                and self.cfg.fsdp_config.cpu_ram_efficient_loading
+            )
             or is_deepspeed_zero3_enabled()
         ):
             # Make sure everything is in the same dtype
