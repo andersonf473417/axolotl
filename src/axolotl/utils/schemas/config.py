@@ -917,8 +917,10 @@ class AxolotlConfigWCapabilities(AxolotlInputConfig):
     @model_validator(mode="before")
     @classmethod
     def check_sample_packing_w_sdpa_bf16(cls, data):
+        if data is None:
+            return data
         is_sm_90: bool = (
-            data["capabilities"]
+            data.get("capabilities")
             and data["capabilities"].get("compute_capability") == "sm_90"
         )
         if (
@@ -939,6 +941,8 @@ class AxolotlConfigWCapabilities(AxolotlInputConfig):
     @model_validator(mode="before")
     @classmethod
     def check_multigpu_unsloth(cls, data):
+        if data is None:
+            return data
         if (
             data.get("unsloth_lora_mlp")
             or data.get("unsloth_lora_qkv")
@@ -955,6 +959,8 @@ class AxolotlConfigWCapabilities(AxolotlInputConfig):
     @model_validator(mode="before")
     @classmethod
     def check_multigpu_lora_kernels(cls, data):
+        if data is None:
+            return data
         if (
             data.get("lora_mlp_kernel")
             or data.get("lora_qkv_kernel")
@@ -1100,6 +1106,8 @@ class AxolotlConfigWCapabilities(AxolotlInputConfig):
     @model_validator(mode="before")
     @classmethod
     def check_qat_config(cls, data):
+        if data is None:
+            return data
         qat_cfg = data.get("qat", {})
         if not qat_cfg:
             return data
