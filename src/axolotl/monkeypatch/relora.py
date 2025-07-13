@@ -280,20 +280,13 @@ class ReLoRAScheduler(LRScheduler):
         original = self.inner_schedule.get_lr()
         step = self.last_epoch
 
-        if step < self.relora_steps - self.warmup_steps:
-            scale = 1
-        else:
-            per_relora_progress = step % self.relora_steps
-            if per_relora_progress < self.warmup_steps:
-                cycle_t = min(1.0, (per_relora_progress) / self.warmup_steps)
-            elif per_relora_progress > (self.relora_steps - self.anneal_steps):
-                cycle_t = min(
-                    1.0,
-                    (self.relora_steps - per_relora_progress) / self.anneal_steps,
-                )
-            else:
-                cycle_t = 1
-            scale = cycle_t * (1 - self.min_lr_scale) + self.min_lr_scale
+        scale = get_relora_scale(
+            step=step,
+            relora_steps=self.relora_steps,
+            warmup_steps=self.warmup_steps,
+            anneal_steps=self.anneal_steps,
+            min_lr_scale=self.min_lr_scale,
+        )
 
         if isinstance(original, Sequence):
             return [lr * scale for lr in original]

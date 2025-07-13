@@ -1,3 +1,4 @@
+# pylint: disable=too-many-public-methods (duplicate-code)
 """Module for testing the validation module for the dataset config"""
 
 import warnings
