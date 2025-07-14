@@ -326,10 +326,7 @@ class TrainerBuilderBase(abc.ABC):
                         optimizer_kwargs[key] = value
 
             # Note: This is not used in training_args_kwargs, but in trainer_kwargs
-            trainer_kwargs["optimizer_cls_and_kwargs"] = (
-                optimizer_cls,
-                optimizer_kwargs,
-            )
+            trainer_kwargs["optimizer_cls_and_kwargs"] = (optimizer_cls, optimizer_kwargs,)
 
         # Handle custom optimizer
         custom_supported_optimizers = [opt.value for opt in CustomSupportedOptimizers]
@@ -496,9 +493,7 @@ class TrainerBuilderBase(abc.ABC):
         training_args_kwargs["per_device_train_batch_size"] = self.cfg.micro_batch_size
 
         if self.cfg.eval_batch_size:
-            training_args_kwargs["per_device_eval_batch_size"] = (
-                self.cfg.eval_batch_size
-            )
+            training_args_kwargs["per_device_eval_batch_size"] = self.cfg.eval_batch_size
 
         training_args_kwargs["max_steps"] = self.cfg.max_steps or total_num_steps or -1
         training_args_kwargs["num_train_epochs"] = self.cfg.num_epochs
