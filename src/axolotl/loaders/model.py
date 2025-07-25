@@ -411,7 +411,7 @@ class ModelLoader:
         if self.cfg.dp_shard_size and self.cfg.dp_shard_size > 1:
             pc_kwargs["dp_shard_size"] = self.cfg.dp_shard_size
             remaining_world_size = remaining_world_size // self.cfg.dp_shard_size
-            
+
         if self.cfg.dp_replicate_size and self.cfg.dp_replicate_size > 1:
             pc_kwargs["dp_replicate_size"] = self.cfg.dp_replicate_size
             remaining_world_size = remaining_world_size // self.cfg.dp_replicate_size
